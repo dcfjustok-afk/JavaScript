@@ -44,3 +44,33 @@ Promise.myAll = function (promises) {
       });
   });
 };
+
+
+//下面是我在力扣中写的 实现 Promise.all 方法的代码
+// https://leetcode.cn/problems/execute-asynchronous-functions-in-parallel/
+/**
+ * @param {Array<Function>} functions
+ * @return {Promise<any>}
+ */
+var promiseAll = function (functions) {
+    return new Promise((resolve, reject) => {
+        if (!functions.length) resolve([])
+        const result = []
+        let count = []
+        functions.forEach((func,index)=>{
+            func()
+                .then((value)=>{
+                    result[index]=value
+                    if(++count===functions.length)
+                        resolve(result)
+                }).catch((reason)=>{
+                    reject(reason)
+                })
+        })
+    })
+};
+
+/**
+ * const promise = promiseAll([() => new Promise(res => res(42))])
+ * promise.then(console.log); // [42]
+ */
